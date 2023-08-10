@@ -1,18 +1,35 @@
 /**
- * This is a sample hook script created by Amplify CLI.
- * To start using this pre-push hook please change the filename:
- * pre-push.js.sample  ->  pre-push.js
- *
- * learn more: https://docs.amplify.aws/cli/usage/command-hooks
+ * Hook to set tags for other tooling
  */
-
+const fs = require("node:fs");
+const {execSync} = require("node:child_process");
+const tagFile = __dirname + "/../backend/tags.json";
+const customerKey = "grl:customer";
 /**
  * @param data { { amplify: { environment: { envName: string, projectPath: string, defaultEditor: string }, command: string, subCommand: string, argv: string[] } } }
  * @param error { { message: string, stack: string } }
  */
 const hookHandler = async (data, error) => {
-  console.log("Cool handler called");
-  console.dir(data);
+  // Use the current git branch as a basis for the customer name
+  const git = execSync("git branch --show-current");
+
+  const betterEnvName = git
+    .toString()
+    .replace(/^([a-z]*[^a-z])?/i, "") // remove any prefix delimited by any non alpha
+    .toLocaleLowerCase()
+    .replace(/[^a-z]+/g, ""); // Just remove non-alpha
+
+  const tags = [
+    ...JSON.parse(fs.readFileSync(tagFile, {encoding: "utf8"})).filter(
+      ({Key}) => Key !== customerKey
+    ),
+    {
+      Key: "grl:customer",
+      Value: betterEnvName
+    }
+  ];
+  fs.writeFileSync(tagFile, JSON.stringify(tags, undefined, 2));
+  console.log("Tags updated: ", tags);
 };
 
 const getParameters = async () => {
@@ -21,7 +38,10 @@ const getParameters = async () => {
 };
 
 getParameters()
-  .then((event) => hookHandler(event.data, event.error))
+  .then((event) => {
+    console.dir(event);
+    hookHandler(event.data, event.error);
+  })
   .catch((err) => {
     console.error(err);
     process.exitCode = 1;

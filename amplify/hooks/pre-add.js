@@ -13,6 +13,8 @@
 const hookHandler = async (data, error) => {
   console.log("Cool handler called");
   console.dir(data);
+  console.dir(process.env);
+
 };
 
 const getParameters = async () => {
