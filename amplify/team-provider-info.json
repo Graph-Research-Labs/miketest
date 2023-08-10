@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-miketest-dev-153312-authRole",
+      "UnauthRoleArn": "arn:aws:iam::253256353881:role/amplify-miketest-dev-153312-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::253256353881:role/amplify-miketest-dev-153312-authRole",
+      "Region": "ap-southeast-2",
+      "DeploymentBucketName": "amplify-miketest-dev-153312-deployment",
+      "UnauthRoleName": "amplify-miketest-dev-153312-unauthRole",
+      "StackName": "amplify-miketest-dev-153312",
+      "StackId": "arn:aws:cloudformation:ap-southeast-2:253256353881:stack/amplify-miketest-dev-153312/a40246e0-372e-11ee-b0e6-0ac43f21d502",
+      "AmplifyAppId": "d27ebkkaqodiqm"
+    },
+    "categories": {
+      "api": {
+        "miketest": {}
+      }
+    }
+  }
+}
