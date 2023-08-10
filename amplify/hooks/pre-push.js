@@ -25,7 +25,7 @@ const hookHandler = async (data, error) => {
     ),
     {
       Key: "grl:customer",
-      Value: betterEnvName
+      Value: betterEnvName || "unknown"
     }
   ];
   fs.writeFileSync(tagFile, JSON.stringify(tags, undefined, 2));
