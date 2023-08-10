@@ -15,10 +15,10 @@ const hookHandler = async (data, error) => {
 
   const betterEnvName = git
     .toString()
+    .replace(/\n/g, "")
     .replace(/^([a-z]*[^a-z])?/i, "") // remove any prefix delimited by any non alpha
     .toLocaleLowerCase()
     .replace(/[^a-z]+/g, ""); // Just remove non-alpha
-
   const tags = [
     ...JSON.parse(fs.readFileSync(tagFile, {encoding: "utf8"})).filter(
       ({Key}) => Key !== customerKey
@@ -39,7 +39,6 @@ const getParameters = async () => {
 
 getParameters()
   .then((event) => {
-    console.dir(event);
     hookHandler(event.data, event.error);
   })
   .catch((err) => {
