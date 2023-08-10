@@ -13,19 +13,22 @@ const hookHandler = async (data, error) => {
   // Use the current git branch as a basis for the customer name
   const git = execSync("git branch --show-current");
 
-  const betterEnvName = git
-    .toString()
-    .replace(/\s/g, "")
-    .replace(/^([a-z]*[^a-z])?/i, "") // remove any prefix delimited by any non alpha
-    .toLocaleLowerCase()
-    .replace(/[^a-z]+/g, ""); // Just remove non-alpha
+  const betterEnvName =
+    git
+      .toString()
+      .replace(/\s/g, "")
+      .replace(/^([a-z]*[^a-z])?/i, "") // remove any prefix delimited by any non alpha
+      .toLocaleLowerCase()
+      .replace(/[^a-z]+/g, "") || // Then remove non-alpha
+    process.env.AWS_BRANCH || // fallback to AWS_BRANCH (in CI branch may be unavailable because git in detached head state)
+    "unknown"; 
   const tags = [
     ...JSON.parse(fs.readFileSync(tagFile, {encoding: "utf8"})).filter(
       ({Key}) => Key !== customerKey
     ),
     {
       Key: "grl:customer",
-      Value: betterEnvName || "unknown"
+      Value: betterEnvName
     }
   ];
   fs.writeFileSync(tagFile, JSON.stringify(tags, undefined, 2));
