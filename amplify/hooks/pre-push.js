@@ -15,7 +15,7 @@ const hookHandler = async (data, error) => {
 
   const betterEnvName = git
     .toString()
-    .replace(/\n/g, "")
+    .replace(/\s/g, "")
     .replace(/^([a-z]*[^a-z])?/i, "") // remove any prefix delimited by any non alpha
     .toLocaleLowerCase()
     .replace(/[^a-z]+/g, ""); // Just remove non-alpha
